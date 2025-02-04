@@ -87,5 +87,7 @@ server.get("/ejs", async (_req, reply) => {
   return reply.viewAsync("src/html/index.ejs", { users: rows });
 });
 
+/* ** ** ** */
+
 // Server stuff
 server.listen({ port: 8000 });
