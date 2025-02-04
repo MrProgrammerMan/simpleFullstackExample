@@ -1,14 +1,14 @@
-// Fastify is a library that helps us easily set up an api.
+// Fastify is a library that helps us easily set up an api. Don't worry about it for now.
 import Fastify from "fastify";
 
 const server = Fastify({ logger: true });
 
 /* ** ** ** */
 
-// Demonstrates a simple endpoint.
+// Demonstrates a simple endpoint. An endpoint is a url. When this url is opened, the code below is executed.
 // This Node app exposes an endpoint at / (root).
 // This endpoint returns a simple message "Hello from Fastify".
-// Try running 'npm run dev' in the console to turn on the application. The go to a browser, and type 'http://localhost:8000'.
+// Try running 'npm run dev' in the console to turn on the application. Then go to a browser, and type 'http://localhost:8000'.
 server.get("/", (_req, reply) => {
   reply.send({ message: "Hello from Fastify" });
 });
@@ -45,7 +45,7 @@ server.get("/users", async (_req, reply) => {
 // Then go back to the previous /users endpoint.
 server.get("/users/post/:name", async (req, reply) => {
   const name = req.params.name;
-  connection.query("INSERT INTO users (name) VALUES (?)", [name]);
+  connection.query("INSERT INTO users (name) VALUES (?)", [name]); // The question mark is replaced by the value name
   reply.send({ message: `User ${name} added successfully` });
 });  
 
@@ -61,7 +61,7 @@ import { dirname } from 'path'; //IGNORE
 const __filename = fileURLToPath(import.meta.url); //IGNORE
 const __dirname = dirname(__filename); //IGNORE
 server.register(fastifyStatic, { //IGNORE
-  root: path.join(__dirname + "/html") // This is where we store our HTML, just a refernce point.
+  root: path.join(__dirname, "html") // This is where we store our HTML files, just a refernce point. (src/html directory)
 });
 
 server.get("/html", (_req, reply) => {
@@ -71,7 +71,25 @@ server.get("/html", (_req, reply) => {
 /* ** ** ** */
 
 // We may also want to supply some HTML that changes dynamically with the data in the database.
-// One very simple way to accomplish this is with ejs.
+// Below is an example of this using pure string manipulation.
+import fs from "fs";
+
+server.get("/dynamicHTML", async (_req, reply) => {
+  const [rows] = await connection.query("SELECT * FROM users");
+  const userListHtml = rows
+    .map(row => `<li>Id: ${row.id} Name: ${row.name}</li>`)
+    .join('');
+  
+  let template = fs.readFileSync(path.join(__dirname, "html", "app.html"), "utf8");
+  template = template.replace("<!-- ###USERLIST### -->", userListHtml);
+
+  reply.type("text/html").send(template);
+});
+
+/* ** ** ** */
+
+// It is not very common to create dynamic html via string manipulation as this is extremely tedious and error-prone.
+// One way we could accomplish the same thing is with a library like ejs. Ejs is just one very barebones library that does this for us.
 // We need to use another official fastify plugin that allows us to generate dynamic html.
 // We also need to tell it that we want to use ejs.
 import ejs from "ejs";
