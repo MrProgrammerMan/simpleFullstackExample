@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Dynamic HTML</title>
 </head>
 <body>
   <h1>Users:</h1>
   <ul>
-    <!-- The <% %> <%= is special ejs syntax. Learn more: https://ejs.co/ -->
+    <!-- The <% %> <%= %> is special ejs syntax. Learn more: https://ejs.co/ -->
     <% users.forEach(user => { %> 
       <li>Id: <%= user.id %> Name: <%= user.name %></li>
     <% }) %>
