@@ -42,6 +42,8 @@ You can see the running service by opening any command prompt on your pc and run
 ## Running the code in this example repo
 Feel free to ignore the files outside of the 'src' folder. The relevant files for this example are all contained within 'src'.
 
+To setup, you need to run 'npm install' once. This install dependencies and packages.
+
 To run this example, I have configured 2 commands.
 
 The first is 'npm run runSql'.
